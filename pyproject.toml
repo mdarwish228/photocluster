@@ -1,0 +1,66 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "photocluster"
+version = "0.1.0"
+description = "A Python package for photo clustering and organization"
+readme = "README.md"
+license = {text = "LICENSE"}
+requires-python = ">=3.13"
+authors = [
+    {name = "Mohammad Darwish"},
+]
+keywords = ["photo", "clustering", "organization", "images"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "imagehash>=4.3.2",
+    "pillow>=12.0.0",
+    "pydantic>=2.11.9",
+    "scikit-learn>=1.7.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.13.1",
+    "ty>=0.0.1a21",
+    "pre-commit>=3.0.0",
+]
+
+[project.urls]
+Repository = "https://github.com/yourusername/photocluster"
+
+[project.scripts]
+photocluster = "photocluster.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/photocluster"]
+
+[tool.coverage.run]
+source = ["src/photocluster"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/conftest.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
