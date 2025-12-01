@@ -1,11 +1,14 @@
 """Image hash computation with multiprocessing."""
 
+import logging
 import multiprocessing
 from pathlib import Path
 
 from ..models.image import ImageHash
 from ..util.files import find_image_files
 from .jpeg import JPEGHasher
+
+logger = logging.getLogger(__name__)
 
 
 class Hasher:
@@ -29,7 +32,9 @@ class Hasher:
         """
         for hasher_class in self._hashers:
             if hasher_class.can_hash(path):
+                logger.debug(f"Computing hash for {path.name}")
                 return hasher_class.hash(path)
+        logger.error(f"No hasher available for file: {path}")
         raise ValueError(f"No hasher available for file: {path}")
 
 
@@ -47,13 +52,18 @@ def compute_hashes(
     Returns:
         List of ImageHash objects
     """
-
+    logger.info(f"Scanning directory for images: {img_dir}")
     paths = find_image_files(img_dir)
 
     if not paths:
+        logger.warning("No image files found in directory")
         return []
+
+    logger.info(f"Found {len(paths)} image files")
+    logger.info(f"Computing hashes using {num_processes} processes")
 
     with multiprocessing.Pool(processes=num_processes) as pool:
         hashes = pool.map(Hasher(), paths)
 
+    logger.info(f"Successfully computed {len(hashes)} hashes")
     return hashes

@@ -1,5 +1,6 @@
 """JPEG hasher implementation for PhotoCluster."""
 
+import logging
 from pathlib import Path
 
 import imagehash
@@ -8,6 +9,8 @@ from PIL import Image
 
 from ..models.image import ImageHash
 from .base import AbstractHasher
+
+logger = logging.getLogger(__name__)
 
 JPEG_EXTENSIONS = [".jpg", ".jpeg"]
 
@@ -42,6 +45,11 @@ class JPEGHasher(AbstractHasher):
         Raises:
             IOError: If the image cannot be opened or processed
         """
-        img = Image.open(path).convert("RGB")
-        hash_bits = imagehash.phash(img).hash.flatten().astype(np.uint8)
-        return ImageHash(path=path, hash=hash_bits)
+        try:
+            img = Image.open(path).convert("RGB")
+            hash_bits = imagehash.phash(img).hash.flatten().astype(np.uint8)
+            logger.debug(f"Computed hash for {path.name}")
+            return ImageHash(path=path, hash=hash_bits)
+        except Exception as e:
+            logger.error(f"Failed to hash {path}: {e}")
+            raise
