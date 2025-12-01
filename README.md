@@ -4,7 +4,7 @@ A Python package for photo clustering and organization.
 
 ## Installation
 
-### From PyPI (when published)
+### From PyPI
 ```bash
 pip install photocluster
 ```
