@@ -39,10 +39,7 @@ dev = [
 ]
 
 [project.urls]
-Repository = "https://github.com/yourusername/photocluster"
-
-[project.scripts]
-photocluster = "photocluster.cli:main"
+Repository = "https://github.com/mdarwish228/photocluster"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/photocluster"]
